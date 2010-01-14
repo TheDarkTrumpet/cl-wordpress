@@ -10,8 +10,8 @@
     (loop for x in 
 	 (xml-rpc-call 
 	  (encode-xml-rpc-call "mt.getRecentPostTitles" 1 "admin" "w7PE5pFyYSYWCtAqTsBP") :host *host* :url "/xmlrpc.php") do
-	 (push (list (cons "id" (get-xml-rpc-struct-member x :|postid|))
-		     (cons "title" (get-xml-rpc-struct-member x :|title|))
-		     (cons "time" (xml-rpc-time-universal-time (get-xml-rpc-struct-member x :|dateCreated|)))) bt))
+	 (push `((id . ,(get-xml-rpc-struct-member x :|postid|))
+		 (title . ,(get-xml-rpc-struct-member x :|title|))
+		 (time . ,(xml-rpc-time-universal-time (get-xml-rpc-struct-member x :|dateCreated|)))) bt))
     bt))
 
