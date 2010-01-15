@@ -5,7 +5,8 @@
 
 (setf *test-describe-if-not-successful?* t)
 (defun run-all-tests ()
-  (format t "Test Output: ~%~a~%" (run-tests)))
+  (run-tests)
+  (format t "~%~%Test Output: ~%~a~%" (run-tests)))
 
 ; Default is to just run the tests....
 

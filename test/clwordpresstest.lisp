@@ -47,5 +47,5 @@
   ;Accessing pass
   (:test (acc-pass (def-acc-test 'pass)))
   ;Accessing blogid
-  (:test (acc-blogid (def-acc-test 'blogid))))
-  
+  (:test (acc-blogid (def-acc-test 'blogid)))
+  (:test (make-fail (ensure (eql 1 2)))))

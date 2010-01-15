@@ -88,7 +88,7 @@ implementation_lisp () {
 }
 implementation_sbcl () {
   implementation "${SBCL:-sbcl}" || return 1
-  OPTIONS="${SBCL_OPTIONS:- --noinform --noprint --userinit /dev/null}"
+  OPTIONS="${SBCL_OPTIONS:- --noinform --userinit /dev/null}"
   # We purposefully specify --userinit /dev/null but NOT --sysinit /dev/null
   EVAL=--eval # SBCL's eval can only handle one form per argument.
   ENDARGS=--end-toplevel-options
@@ -1139,7 +1139,8 @@ Returns two values: the fasl path, and T if the file was (re)compiled"
 
 (setf *test-describe-if-not-successful?* t)
 (defun run-all-tests ()
-  (format t "Test Output: ~%~a~%" (run-tests)))
+  (run-tests)
+  (format t "~%~%Test Output: ~%~a~%" (run-tests)))
 
 ; Default is to just run the tests....
 
