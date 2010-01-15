@@ -1,5 +1,7 @@
 ; Wordpress.lisp, central file for the library itself.
 
+(in-package :cl-wordpress)
+
 (defvar *host* nil)
 
 (defun getAvailableOptions ()

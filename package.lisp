@@ -3,5 +3,13 @@
 (in-package :cl-user)
 
 (defpackage :cl-wordpress
-  (:use :cl :s-xml-rpc))
+  (:use :cl :s-xml-rpc)
+  (:export 
+   ; class wp-information
+   :wp-information
+   :host
+   :url
+   :uid
+   :pass
+   :blogid))
 

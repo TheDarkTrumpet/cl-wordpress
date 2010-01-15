@@ -1,5 +1,7 @@
 ; Auth.lisp - Objects that hold information such as the needed login information and so on.
 
+(in-package :cl-wordpress)
+
 (defclass wp-information ()
   ((host :accessor host :type (string 255) :initarg :host)
    (url :accessor url :type (string 255) :initarg :url)
