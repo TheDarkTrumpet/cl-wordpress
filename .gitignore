@@ -10,4 +10,4 @@
 *.pyc
 *.elc
 *.#*
-
+test/test-results
