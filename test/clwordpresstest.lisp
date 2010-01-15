@@ -10,12 +10,14 @@
 
 (in-package :cl-wordpress-test)
 
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Helper macro for defining the test, since the general theme is roughly the same
 (defmacro def-acc-test (sym)
   `(ensure (eql (cdr (assoc ,sym wp-info-alist))
 		(funcall ,sym wp-info-object))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Class Definition Tests - make sure we can access each class, and their respective slots for public access,
 ; setting and getting each element.
 
