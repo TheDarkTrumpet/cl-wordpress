@@ -17,4 +17,4 @@
 
 (lift:addtest (wordpress-class-tests)
   eql-test
-  (ensure (eql 1 2)))
+  (lift:ensure (eql 1 2)))

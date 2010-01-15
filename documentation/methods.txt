@@ -18,3 +18,4 @@ CL-WORDPRESS> (getavailableoptions)
  "mt.supportedMethods" "mt.supportedTextFilters" "mt.getTrackbackPings"
  "mt.publishPost" "pingback.ping" "pingback.extensions.getPingbacks"
  "demo.sayHello" "demo.addTwoNumbers")
+

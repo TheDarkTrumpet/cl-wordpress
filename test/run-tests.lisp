@@ -1,5 +1,5 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (progn (load "clwordpresstest.lisp")))
+(declaim (sb-ext:muffle-conditions sb-ext:compiler-note))
+(load "clwordpresstest.lisp")
 
 (in-package :cl-wordpress-test)
 
