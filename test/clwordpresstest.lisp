@@ -10,6 +10,12 @@
 
 (in-package :cl-wordpress-test)
 
+
+; Helper macro for defining the test, since the general theme is roughly the same
+(defmacro def-acc-test (sym)
+  `(ensure (eql (cdr (assoc ,sym wp-info-alist))
+		(funcall ,sym wp-info-object))))
+
 ; Class Definition Tests - make sure we can access each class, and their respective slots for public access,
 ; setting and getting each element.
 
@@ -29,8 +35,15 @@
 					 :url (cdr (assoc 'url wp-info-alist))
 					 :uid (cdr (assoc 'uid wp-info-alist))
 					 :pass (cdr (assoc 'pass wp-info-alist))
-					 :blogid (cdr (assoc 'blogid wp-info-alist)))))))
+					 :blogid (cdr (assoc 'blogid wp-info-alist))))))
+  ;Accessing host
+  (:test (acc-host (def-acc-test 'host)))
+  ;Accessing url
+  (:test (acc-url (def-acc-test 'url)))
+  ;Accessing uid
+  (:test (acc-uid (def-acc-test 'uid)))
+  ;Accessing pass
+  (:test (acc-pass (def-acc-test 'pass)))
+  ;Accessing blogid
+  (:test (acc-blogid (def-acc-test 'blogid))))
   
-(addtest (wordpress-class-tests)
-  wp-info-acc-host
-  (lift:ensure (eql (cdr (assoc 'host wp-info-alist)) (host wp-info-object))))
