@@ -11,5 +11,8 @@
    :url
    :uid
    :pass
-   :blogid))
+   :blogid
+
+   ; Helper macros and methods
+   :with-xml-rpc-call))
 

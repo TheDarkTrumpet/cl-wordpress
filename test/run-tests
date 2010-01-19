@@ -1139,8 +1139,9 @@ Returns two values: the fasl path, and T if the file was (re)compiled"
 
 (setf *test-describe-if-not-successful?* t)
 (defun run-all-tests ()
-  (run-tests)
-  (format t "~%~%Test Output: ~%~a~%" (run-tests)))
+  (format t "Beginning test suite....~%")
+  (run-all-wp-tests)
+  (format t "Completed test suite...~%"))
 
 ; Default is to just run the tests....
 

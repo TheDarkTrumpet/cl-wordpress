@@ -47,5 +47,33 @@
   ;Accessing pass
   (:test (acc-pass (def-acc-test 'pass)))
   ;Accessing blogid
-  (:test (acc-blogid (def-acc-test 'blogid)))
-  (:test (make-fail (ensure (eql 1 2)))))
+  (:test (acc-blogid (def-acc-test 'blogid))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Our soap calls - method calls.
+;;
+
+(deftestsuite wordpress-soap-stubbed-tests ()
+  (xml-rpc-structs
+   test-server-location)
+  (:run-setup :once-per-suite)
+  (:setup
+   (progn
+     (setf test-server-location (make-instance 'wp-information :blogid 1
+					       :uid "testuid"
+					       :pass "testpass"
+					       :url "/foo/bar"
+					       :host "localhost"))
+     (setf xml-rpc-structs 1)))
+  (:test (test-macro-creation (ensure (macroexpand '(with-xml-rpc-call test-server-location c "foo.bar"))))))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Wrapper code.
+
+(defun run-all-wp-tests ()
+  (loop for x in '(wordpress-class-tests wordpress-soap-stubbed-tests) do
+       (run-tests :suite x)
+       (format t "~%~%Test Output: ~%~a~%" (run-tests :suite x))))
