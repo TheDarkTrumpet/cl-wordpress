@@ -18,6 +18,16 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Generic tests to make sure our test suite is sane
+;
+
+(deftestsuite basic-tests ()
+  ()
+  (:test (pkg-name (ensure (equal (package-name *package*) "CL-WORDPRESS-TEST")
+			   :report "Package name supposed to be CL-WORDPRESS-TEST, got: ~a"
+			   :arguments ((package-name *package*))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Class Definition Tests - make sure we can access each class, and their respective slots for public access,
 ; setting and getting each element.
 
@@ -58,6 +68,7 @@
   (xml-rpc-structs
    test-server-location)
   (:run-setup :once-per-suite)
+  (:export-slots t)
   (:setup
    (progn
      (setf test-server-location (make-instance 'wp-information :blogid 1
@@ -74,6 +85,6 @@
 ; Wrapper code.
 
 (defun run-all-wp-tests ()
-  (loop for x in '(wordpress-class-tests wordpress-soap-stubbed-tests) do
+  (loop for x in '(basic-tests wordpress-class-tests wordpress-soap-stubbed-tests) do
        (run-tests :suite x)
        (format t "~%~%Test Output: ~%~a~%" (run-tests :suite x))))
