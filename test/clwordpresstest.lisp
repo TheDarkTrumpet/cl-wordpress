@@ -89,8 +89,9 @@
 					       :pass "w7PE5pFyYSYWCtAqTsBP"
 					       :url "/xmlrpc.php"
 					       :host "wordpress.tdtdev"))))
-  (:test (test-available-options (ensure (eql (getAvailableOptions test-server-location)
-					      '("wp.getUsersBlogs" "wp.getPage" "wp.getPages" "wp.newPage" "wp.deletePage" "wp.editPage" "wp.getPageList" "wp.getAuthors" "wp.getCategories" "wp.getTags" "wp.newCategonry" "wp.deleteCategory" "wp.suggestCategories" "wp.uploadFile" "wp.getCommentCount" "wp.getPostStatusList" "wp.getPageStatusList" "wp.getPageTemplates" "wp.getOptions" "wp.setOptions" "wp.getComment" "wp.getComments" "wp.deleteComment" "wp.editComment" "wp.newComment" "wp.getCommentStatusList" "blogger.getUsersBlogs" "blogger.getUserInfo" "blogger.getPost" "blogger.getRecentPosts" "blogger.getTemplate" "blogger.setTemplate" "blogger.newPost" "blogger.editPost" "blogger.deletePost" "metaWeblog.newPost" "metaWeblog.editPost" "metaWeblog.getPost" "metaWeblog.getRecentPosts" "metaWeblog.getCategories" "metaWeblog.newMediaObject" "metaWeblog.deletePost" "metaWeblog.getTemplate" "metaWeblog.setTemplate" "metaWeblog.getUsersBlogs" "mt.getCategoryList" "mt.getRecentPostTitles" "mt.getPostCategories" "mt.setPostCategories" "mt.supportedMethods" "mt.supportedTextFilters" "mt.getTrackbackPings" "mt.publishPost" "pingback.ping" "pingback.extensions.getPingbacks" "demo.sayHello" "demo.addTwoNumbers")))))
+  (:test (ensure-available-options 
+	  (ensure (intersection (getAvailableOptions test-server-location)
+				'("mt.supportedMethods") :test 'string-equal))))
   )
 
 

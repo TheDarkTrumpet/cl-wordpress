@@ -8,7 +8,9 @@
      (setf ,xmlrpcs (xml-rpc-call (encode-xml-rpc-call ,method
 						    (blogid ,conn)
 						    (uid ,conn)
-						    (pass ,conn))))
+						    (pass ,conn))
+				  :host (host ,conn)
+				  :url (url ,conn)))
      ,@body))
  
 
