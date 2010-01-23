@@ -79,8 +79,9 @@
   (:test (test-macro-creation (ensure (macroexpand '(with-xml-rpc-call test-server-location c "foo.bar"))))))
 
 
+; Note these tests need to run in order
 (deftestsuite wordpress-soap-nonstubbed-tests ()
-  (test-server-location)
+  (test-server-location content)
   (:run-setup :once-per-suite)
   (:setup
    (progn
@@ -88,10 +89,15 @@
 					       :uid "admin"
 					       :pass "w7PE5pFyYSYWCtAqTsBP"
 					       :url "/xmlrpc.php"
-					       :host "wordpress.tdtdev"))))
+					       :host "wordpress.tdtdev"))
+     (setf content "This is a test blog post <br><br> We're going to see how well this actually works!")))
   (:test (ensure-available-options 
 	  (ensure (intersection (getAvailableOptions test-server-location)
 				'("mt.supportedMethods") :test 'string-equal))))
+  (:test (test-blog-post
+	  (ensure (postBlogPost test-server-location content))))
+  (:test (test-blog-count
+	  (ensure (> 0 (length (getBlogEntries *wp-login*))))))
   )
 
 
