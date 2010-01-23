@@ -2,7 +2,6 @@
 
 (asdf:defsystem :cl-wordpress
   :name "cl-wordpress"
-  :version "0.1"
   :maintainer "David Thole"
   :author "David Thole"
   :license "LGPL"

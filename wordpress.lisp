@@ -2,19 +2,22 @@
 
 (in-package :cl-wordpress)
 
-(defvar *host* "thedarktrumpet.dreamhosters.com")
-
-(defun getAvailableOptions ()
-  (xml-rpc-call (encode-xml-rpc-call "mt.supportedMethods") :host *host* :url "/xmlrpc.php"))
-
-(defmacro with-xml-rpc-call ((conn xmlrpcs method) &body body)
-  `(let ((con-class ,conn))
-     (setf ,xmlrpcs (xml-rpc-call 
-			  (encode-xml-rpc-call ,method 
-					       (blogid conn-class)
-					       (uid conn-class)
-					       (pass conn-class))))
+;;;;;;; helper macros that the other methods can use ;;;;;;;
+(defmacro with-xml-rpc-call (conn xmlrpcs method &body body)
+  `(progn
+     (setf ,xmlrpcs (xml-rpc-call (encode-xml-rpc-call ,method
+						    (blogid ,conn)
+						    (uid ,conn)
+						    (pass ,conn))))
      ,@body))
+ 
+
+;;;;;;; API Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun getAvailableOptions (connspec)
+  "Returns a con listing of all the supported methods"
+  (let ((retval NIL))
+    (with-xml-rpc-call connspec retval "mt.supportedMethods" retval)
+    retval))
 
 (defun getBlogEntries ()
   (let ((bt nil))

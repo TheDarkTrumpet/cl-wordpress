@@ -12,7 +12,7 @@
    :uid
    :pass
    :blogid
-
    ; Helper macros and methods
-   :with-xml-rpc-call))
+   :with-xml-rpc-call
+   :getAvailableOptions))
 

@@ -68,7 +68,6 @@
   (xml-rpc-structs
    test-server-location)
   (:run-setup :once-per-suite)
-  (:export-slots t)
   (:setup
    (progn
      (setf test-server-location (make-instance 'wp-information :blogid 1
@@ -80,11 +79,26 @@
   (:test (test-macro-creation (ensure (macroexpand '(with-xml-rpc-call test-server-location c "foo.bar"))))))
 
 
+(deftestsuite wordpress-soap-nonstubbed-tests ()
+  (test-server-location)
+  (:run-setup :once-per-suite)
+  (:setup
+   (progn
+     (setf test-server-location (make-instance 'wp-information :blogid 1
+					       :uid "admin"
+					       :pass "w7PE5pFyYSYWCtAqTsBP"
+					       :url "/xmlrpc.php"
+					       :host "wordpress.tdtdev"))))
+  (:test (test-available-options (ensure (eql (getAvailableOptions test-server-location)
+					      '("wp.getUsersBlogs" "wp.getPage" "wp.getPages" "wp.newPage" "wp.deletePage" "wp.editPage" "wp.getPageList" "wp.getAuthors" "wp.getCategories" "wp.getTags" "wp.newCategonry" "wp.deleteCategory" "wp.suggestCategories" "wp.uploadFile" "wp.getCommentCount" "wp.getPostStatusList" "wp.getPageStatusList" "wp.getPageTemplates" "wp.getOptions" "wp.setOptions" "wp.getComment" "wp.getComments" "wp.deleteComment" "wp.editComment" "wp.newComment" "wp.getCommentStatusList" "blogger.getUsersBlogs" "blogger.getUserInfo" "blogger.getPost" "blogger.getRecentPosts" "blogger.getTemplate" "blogger.setTemplate" "blogger.newPost" "blogger.editPost" "blogger.deletePost" "metaWeblog.newPost" "metaWeblog.editPost" "metaWeblog.getPost" "metaWeblog.getRecentPosts" "metaWeblog.getCategories" "metaWeblog.newMediaObject" "metaWeblog.deletePost" "metaWeblog.getTemplate" "metaWeblog.setTemplate" "metaWeblog.getUsersBlogs" "mt.getCategoryList" "mt.getRecentPostTitles" "mt.getPostCategories" "mt.setPostCategories" "mt.supportedMethods" "mt.supportedTextFilters" "mt.getTrackbackPings" "mt.publishPost" "pingback.ping" "pingback.extensions.getPingbacks" "demo.sayHello" "demo.addTwoNumbers")))))
+  )
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Wrapper code.
 
 (defun run-all-wp-tests ()
-  (loop for x in '(basic-tests wordpress-class-tests wordpress-soap-stubbed-tests) do
+  (loop for x in '(basic-tests wordpress-class-tests wordpress-soap-stubbed-tests wordpress-soap-nonstubbed-tests) do
        (run-tests :suite x)
        (format t "~%~%Test Output: ~%~a~%" (run-tests :suite x))))
