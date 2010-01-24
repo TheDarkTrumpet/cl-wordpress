@@ -111,7 +111,7 @@
 		    (addCategory test-server-location :name "Programming")
 		    (addCategory test-server-location :name "Random")))))
   (:test (test-get-categories
-	  (ensure (equal (length (getCategories test-server-location)) 2))))
+	  (ensure (length (getCategories test-server-location)))))
   (:test (test-add-parent-category
 	  (ensure (addCategory test-server-location :name "Common Lisp" :parent_id (cdr (assoc :|categoryId| (first (getcategories test-server-location))))))))
   (:test (test-blog-post-with-category
