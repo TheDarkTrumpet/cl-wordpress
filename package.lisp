@@ -14,5 +14,7 @@
    :blogid
    ; Helper macros and methods
    :with-xml-rpc-call
-   :getAvailableOptions))
+   :getAvailableOptions
+   :getBlogEntries
+   :postBlog))
 

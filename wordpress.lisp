@@ -22,23 +22,12 @@
     (with-xml-rpc-call connspec retval "mt.supportedMethods" () retval)
     retval))
 
-(defun postBlog (connspec content)
+(defun postBlog (connspec &key (content nil) (title nil))
   (let ((retval NIL))
-    (with-xml-rpc-call connspec retval "blogger.newPost" (content) retval)
+    (with-xml-rpc-call connspec retval "metaWeblog.newPost" ((xml-rpc-struct "title" title "description" content) 1) retval)
     retval))
 
 (defun getBlogEntries (connspec)
   (let ((retval NIL))
-    (with-xml-rpc-call connspec retval "metaWeblog.getRecentPosts" (1000) retval)
+    (with-xml-rpc-call connspec retval "metaWeblog.getRecentPosts" (100000) retval)
     retval))
-
-(defun getBlogEntries ()
-  (let ((bt nil))
-    (loop for x in 
-	 (xml-rpc-call 
-	  (encode-xml-rpc-call "mt.getRecentPostTitles" 1 "admin" "w7PE5pFyYSYWCtAqTsBP") :host *host* :url "/xmlrpc.php") do
-	 (push `((id . ,(get-xml-rpc-struct-member x :|postid|))
-		 (title . ,(get-xml-rpc-struct-member x :|title|))
-		 (time . ,(xml-rpc-time-universal-time (get-xml-rpc-struct-member x :|dateCreated|)))) bt))
-    bt))
-

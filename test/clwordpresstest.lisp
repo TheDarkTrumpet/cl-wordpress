@@ -76,7 +76,7 @@
 					       :url "/foo/bar"
 					       :host "localhost"))
      (setf xml-rpc-structs 1)))
-  (:test (test-macro-creation (ensure (macroexpand '(with-xml-rpc-call test-server-location c "foo.bar"))))))
+  (:test (test-macro-creation (ensure (macroexpand '(with-xml-rpc-call test-server-location c "foo.bar" ()))))))
 
 
 ; Note these tests need to run in order
@@ -95,9 +95,9 @@
 	  (ensure (intersection (getAvailableOptions test-server-location)
 				'("mt.supportedMethods") :test 'string-equal))))
   (:test (test-blog-post
-	  (ensure (postBlogPost test-server-location content))))
+	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title"))))
   (:test (test-blog-count
-	  (ensure (> 0 (length (getBlogEntries *wp-login*))))))
+	  (ensure (> (length (getBlogEntries test-server-location)) 0))))
   )
 
 
@@ -107,5 +107,4 @@
 
 (defun run-all-wp-tests ()
   (loop for x in '(basic-tests wordpress-class-tests wordpress-soap-stubbed-tests wordpress-soap-nonstubbed-tests) do
-       (run-tests :suite x)
        (format t "~%~%Test Output: ~%~a~%" (run-tests :suite x))))
