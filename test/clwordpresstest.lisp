@@ -117,13 +117,13 @@
   (:test (test-blog-post-with-category
 	  (ensure (progn
 		    (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title" :categories '("Programming"))
-		    (equal (cdr (assoc :|categories| (last (getblogentries *wp-login*)))) "Programming")))))
+		    (equal (cdr (assoc :|categories| (last (getblogentries test-server-location)))) "Programming")))))
   (:test (test-blog-post-with-categories
 	  (ensure (progn
 		    (postBlog test-server-location :content "This is a another test blog" :title "blog title" :categories '("Programming" "Random"))
-		    (equal (cdr (assoc :|categories| (last (getblogentries *wp-login*)))) '("Programming" "Random"))))))
+		    (equal (cdr (assoc :|categories| (last (getblogentries test-server-location)))) '("Programming" "Random"))))))
   (:test (test-category-deletion
-	  (ensure (deleteCategory test-category-deletion (cdr (assoc :|categoryId| (last (getcategories test-server-location))))))))
+	  (ensure (deleteCategory test-server-location (cdr (assoc :|categoryId| (last (getcategories test-server-location))))))))
   (:test (test-blog-count
 	  (ensure (> (length (getBlogEntries test-server-location)) 0))))
   )
