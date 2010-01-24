@@ -91,10 +91,10 @@
 					       :url "/xmlrpc.php"
 					       :host "wordpress.tdtdev"))
      (setf content "This is a test blog post <br><br> We're going to see how well this actually works!")))
-  (:teardown
-   (progn
-     (deleteAllBlogEntries test-server-location)
-     (deleteAllCategories test-server-location)))
+  ;(:teardown
+  ; (progn
+  ;   (deleteAllBlogEntries test-server-location)
+  ;   (deleteAllCategories test-server-location)))
   (:test (test-blog-count-with-zero
 	  (ensure (= (getBlogEntries test-server-location) 0))))
   (:test (ensure-available-options 
