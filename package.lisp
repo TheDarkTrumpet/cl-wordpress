@@ -17,7 +17,12 @@
    :getAvailableOptions
    :getBlogEntries
    :postBlog
-
+   :deleteblogEntry
+   :addCategory
+   :getCategories
+   :deleteCategory
+   :deleteAllCategories
    ;For the tests, and general cleanup if others needed
-   :removeAllBlogEntries))
+   :deleteAllBlogEntries
+   :deleteAllCategories))
 

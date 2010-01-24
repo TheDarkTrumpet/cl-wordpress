@@ -92,7 +92,9 @@
 					       :host "wordpress.tdtdev"))
      (setf content "This is a test blog post <br><br> We're going to see how well this actually works!")))
   (:teardown
-   (removeAllBlogEntries test-server-location))
+   (progn
+     (deleteAllBlogEntries test-server-location)
+     (deleteAllCategories test-server-location)))
   (:test (test-blog-count-with-zero
 	  (ensure (= (getBlogEntries test-server-location) 0))))
   (:test (ensure-available-options 
@@ -102,14 +104,26 @@
 	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title"))))
   (:test (test-get-categories
 	  (ensure (= (getCategories test-server-location) 0))))
+  (:test (test-add-category-error
+	  (ensure-error (addCategory test-server-location))))
   (:test (test-add-category
-	  (ensure (addCategory test-server-location "Programming"))))
-  (:test (test-add-categories
-	  (ensure (addCategories test-server-location '("Test" "Test1")))))
+	  (ensure (progn
+		    (addCategory test-server-location :name "Programming")
+		    (addCategory test-server-location :name "Random")))))
   (:test (test-get-categories
-	  (ensure (getCategories test-server-location))))
+	  (ensure (equal (length (getCategories test-server-location)) 2))))
+  (:test (test-add-parent-category
+	  (ensure (addCategory test-server-location :name "Common Lisp" :parent_id (cdr (assoc :|categoryId| (first (getcategories test-server-location))))))))
+  (:test (test-blog-post-with-category
+	  (ensure (progn
+		    (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title" :categories '("Programming"))
+		    (equal (cdr (assoc :|categories| (last (getblogentries *wp-login*)))) "Programming")))))
   (:test (test-blog-post-with-categories
-	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title" :categories '("Programming" "test1")))))
+	  (ensure (progn
+		    (postBlog test-server-location :content "This is a another test blog" :title "blog title" :categories '("Programming" "Random"))
+		    (equal (cdr (assoc :|categories| (last (getblogentries *wp-login*)))) '("Programming" "Random"))))))
+  (:test (test-category-deletion
+	  (ensure (deleteCategory test-category-deletion (cdr (assoc :|categoryId| (last (getcategories test-server-location))))))))
   (:test (test-blog-count
 	  (ensure (> (length (getBlogEntries test-server-location)) 0))))
   )
