@@ -16,5 +16,8 @@
    :with-xml-rpc-call
    :getAvailableOptions
    :getBlogEntries
-   :postBlog))
+   :postBlog
+
+   ;For the tests, and general cleanup if others needed
+   :removeAllBlogEntries))
 

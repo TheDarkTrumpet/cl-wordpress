@@ -27,7 +27,30 @@
     (with-xml-rpc-call connspec retval "metaWeblog.newPost" ((xml-rpc-struct "title" title "description" content) 1) retval)
     retval))
 
+
 (defun getBlogEntries (connspec)
-  (let ((retval NIL))
-    (with-xml-rpc-call connspec retval "metaWeblog.getRecentPosts" (100000) retval)
+  (let ((blogs NIL) (retval '()))
+    (with-xml-rpc-call connspec blogs "metaWeblog.getRecentPosts" (100000)
+      (if (typep blogs 'cons)
+	  (progn 
+	    (loop for x in blogs do
+		 (progn
+		   (setf x (xml-rpc-struct-alist x))
+		   (rplacd (assoc :|dateCreated| x) (xml-rpc-time-universal-time (cdr (assoc :|dateCreated| x))))
+		   (push x retval))
+	       finally (reverse retval)))
+	  (setf retval 0)))
     retval))
+
+(defun removeBlogEntry (connspec id)
+  (xml-rpc-call (encode-xml-rpc-call "metaWeblog.deletePost"
+				     (blogid connspec)
+				     id
+				     (uid connspec)
+				     (pass connspec))
+		:host (host connspec)
+		:url (url connspec)))
+
+(defun removeAllBlogEntries (connspec)
+  (loop for x in (getblogEntries connspec) do
+       (removeBlogEntry connspec (cdr (assoc :|postid| x)))))

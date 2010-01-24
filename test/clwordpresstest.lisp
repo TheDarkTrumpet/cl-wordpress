@@ -91,9 +91,13 @@
 					       :url "/xmlrpc.php"
 					       :host "wordpress.tdtdev"))
      (setf content "This is a test blog post <br><br> We're going to see how well this actually works!")))
+  (:teardown
+   (removeAllBlogEntries test-server-location))
+  (:test (test-blog-count-with-zero
+	  (ensure (= (getBlogEntries test-server-location) 0))))
   (:test (ensure-available-options 
 	  (ensure (intersection (getAvailableOptions test-server-location)
-				'("mt.supportedMethods") :test 'string-equal))))
+				'("mt.supportedMethods" "metaWeblog.deletePost" "metaweblog.getRecentPosts" "metaweblog.newPost") :test 'string-equal))))
   (:test (test-blog-post
 	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title"))))
   (:test (test-blog-count
