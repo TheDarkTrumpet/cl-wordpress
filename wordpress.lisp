@@ -22,11 +22,28 @@
     (with-xml-rpc-call connspec retval "mt.supportedMethods" () retval)
     retval))
 
-(defun postBlog (connspec &key (content nil) (title nil))
-  (let ((retval NIL))
-    (with-xml-rpc-call connspec retval "metaWeblog.newPost" ((xml-rpc-struct "title" title "description" content) 1) retval)
-    retval))
+;; Blog category addition and deletion functions.
+(defun addCategory (connspec category)
+  t
+  )
 
+(defun addCategories (connspec categories)
+  t)
+
+(defun getCategories (connspec)
+  (let ((categories NIL))
+    (with-xml-rpc-call connspec categories "metaWeblog.getCategories" ()
+      (if (typep categories 'cons)
+	  (mapcar 'xml-rpc-struct-alist categories)
+	  0))))
+
+	categories)))
+
+;; Blog addition and deletion functions.
+(defun postBlog (connspec &key (content nil) (title nil) (categories nil))
+  (let ((retval NIL))
+    (with-xml-rpc-call connspec retval "metaWeblog.newPost" ((xml-rpc-struct "title" title "description" content "categories" categories) 1) retval)
+    retval))
 
 (defun getBlogEntries (connspec)
   (let ((blogs NIL) (retval '()))

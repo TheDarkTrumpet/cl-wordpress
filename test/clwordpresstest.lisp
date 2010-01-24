@@ -100,6 +100,16 @@
 				'("mt.supportedMethods" "metaWeblog.deletePost" "metaweblog.getRecentPosts" "metaweblog.newPost") :test 'string-equal))))
   (:test (test-blog-post
 	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title"))))
+  (:test (test-get-categories
+	  (ensure (= (getCategories test-server-location) 0))))
+  (:test (test-add-category
+	  (ensure (addCategory test-server-location "Programming"))))
+  (:test (test-add-categories
+	  (ensure (addCategories test-server-location '("Test" "Test1")))))
+  (:test (test-get-categories
+	  (ensure (getCategories test-server-location))))
+  (:test (test-blog-post-with-categories
+	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title" :categories '("Programming" "test1")))))
   (:test (test-blog-count
 	  (ensure (> (length (getBlogEntries test-server-location)) 0))))
   )
