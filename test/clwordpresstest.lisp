@@ -107,6 +107,8 @@
 				'("mt.supportedMethods" "metaWeblog.deletePost" "metaweblog.getRecentPosts" "metaweblog.newPost") :test 'string-equal))))
   (:test (test-blog-post
 	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title"))))
+  (:test (test-blog-post-with-invalid-date
+	  (ensure-error (postBlog test-server-location :content "Test..." :title "This is a blog with invalid date" :date "foo date"))))
   (:test (test-find-blog-by-title
 	  (ensure (findBlogByTitle test-server-location "This is a blog title"))))
   (:test (test-get-categories
@@ -119,6 +121,10 @@
 		    (addCategory test-server-location :name "Random")))))
   (:test (test-get-categories
 	  (ensure (length (getCategories test-server-location)))))
+  (:test (test-blog-post-with-valid-date
+	  (ensure (progn
+	     (postBlog test-server-location :content "This is a test blog post" :title "Valid date blog" :date 3473450896)
+	     (equal (cdr (assoc :|dateCreated| (findBlogByTitle test-server-location "Valid date blog"))) 3473450896))))) 
   (:test (test-add-parent-category
 	  (ensure (addCategory test-server-location :name "Common Lisp" :parent_id (cdr (assoc :|categoryId| (first (getcategories test-server-location))))))))
   (:test (test-blog-post-with-category

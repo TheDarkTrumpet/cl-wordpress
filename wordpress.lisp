@@ -57,10 +57,16 @@ We are not able to delete the default category, Uncategorized, so if that's all 
 
 
 ;; Blog addition and deletion functions.
-(defun postBlog (connspec &key (content nil) (title nil) (categories nil))
-  (let ((retval NIL))
-    (with-xml-rpc-call connspec retval "metaWeblog.newPost" ((xml-rpc-struct "title" title "description" content "categories" categories) 1) retval)
-    retval))
+(defun postBlog (connspec &key (content nil) (title nil) (categories nil) (date (get-universal-time)))
+  "Posts a blog entry to the connection spec passed in.  date must be a universaltime object.  Content and title are required"
+  (if (typep date 'integer)      
+      (let ((retval NIL))
+	(with-xml-rpc-call connspec retval "metaWeblog.newPost" ((xml-rpc-struct "title" title 
+									     "description" content 
+									     "categories" categories
+									     "dateCreated" (xml-rpc-time date)) 1) retval)
+	retval)
+      (error "You must pass a valid integer for get-universal-time")))
 
 (defun getBlogEntries (connspec)
   (let ((blogs NIL) (retval '()))
