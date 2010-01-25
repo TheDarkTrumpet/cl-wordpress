@@ -10,6 +10,11 @@
 
 (in-package :cl-wordpress-test)
 
+(setf *test-describe-if-not-successful?* t)
+(setf *test-print-testsuite-names* nil)
+(setf *test-print-test-case-names* nil)
+(setf *lift-debug-output* nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Helper macro for defining the test, since the general theme is roughly the same
 (defmacro def-acc-test (sym)
@@ -91,10 +96,10 @@
 					       :url "/xmlrpc.php"
 					       :host "wordpress.tdtdev"))
      (setf content "This is a test blog post <br><br> We're going to see how well this actually works!")))
-  ;(:teardown
-  ; (progn
-  ;   (deleteAllBlogEntries test-server-location)
-  ;   (deleteAllCategories test-server-location)))
+  (:teardown
+   (progn
+     (deleteAllBlogEntries test-server-location)
+     (deleteAllCategories test-server-location)))
   (:test (test-blog-count-with-zero
 	  (ensure (= (getBlogEntries test-server-location) 0))))
   (:test (ensure-available-options 
@@ -117,13 +122,13 @@
   (:test (test-blog-post-with-category
 	  (ensure (progn
 		    (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title" :categories '("Programming"))
-		    (equal (cdr (assoc :|categories| (last (getblogentries test-server-location)))) "Programming")))))
+		    (equal (cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) '("Programming"))))))
   (:test (test-blog-post-with-categories
 	  (ensure (progn
 		    (postBlog test-server-location :content "This is a another test blog" :title "blog title" :categories '("Programming" "Random"))
-		    (equal (cdr (assoc :|categories| (last (getblogentries test-server-location)))) '("Programming" "Random"))))))
+		    (equal (cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) '("Programming" "Random"))))))
   (:test (test-category-deletion
-	  (ensure (deleteCategory test-server-location (cdr (assoc :|categoryId| (last (getcategories test-server-location))))))))
+	  (ensure (deleteCategory test-server-location (cdr (assoc :|categoryId| (car (last (getcategories test-server-location)))))))))
   (:test (test-blog-count
 	  (ensure (> (length (getBlogEntries test-server-location)) 0))))
   )
@@ -135,4 +140,4 @@
 
 (defun run-all-wp-tests ()
   (loop for x in '(basic-tests wordpress-class-tests wordpress-soap-stubbed-tests wordpress-soap-nonstubbed-tests) do
-       (format t "~%~%Test Output: ~%~a~%" (run-tests :suite x))))
+       (format t "Test Output: ~%~a~%" (run-tests :suite x))))
