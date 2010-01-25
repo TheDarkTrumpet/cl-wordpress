@@ -123,12 +123,12 @@
 	  (ensure (addCategory test-server-location :name "Common Lisp" :parent_id (cdr (assoc :|categoryId| (first (getcategories test-server-location))))))))
   (:test (test-blog-post-with-category
 	  (ensure (progn
-		    (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title" :categories '("Programming"))
-		    (equal (cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) '("Programming"))))))
+		    (postBlog test-server-location :content "This is a test blog post" :title "Category Programming Test" :categories '("Programming"))
+		    (equal (cdr (assoc :|categories| (findBlogByTitle test-server-location "Category Programming Test"))) '("Programming"))))))
   (:test (test-blog-post-with-categories
 	  (ensure (progn
-		    (postBlog test-server-location :content "This is a another test blog" :title "blog title" :categories '("Programming" "Random"))
-		    (equal (cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) '("Programming" "Random")))
+		    (postBlog test-server-location :content "This is a another test blog" :title "Category Programming and Random Test" :categories '("Programming" "Random"))
+		    (equal (cdr (assoc :|categories| (findBlogByTitle test-server-location "Category Programming and Random Test"))) '("Programming" "Random")))
 		  :report "Expected categories to be: \"Programming\" and \"Random\" but got: ~a, count of getblogentries being: ~a"
 		  :arguments ((cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) 
 			      (length (getblogentries test-server-location))))))
