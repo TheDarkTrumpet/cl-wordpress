@@ -11,8 +11,8 @@
 (in-package :cl-wordpress-test)
 
 (setf *test-describe-if-not-successful?* t)
-(setf *test-print-testsuite-names* nil)
-(setf *test-print-test-case-names* nil)
+(setf *test-print-testsuite-names* t)
+(setf *test-print-test-case-names* t)
 (setf *lift-debug-output* nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
