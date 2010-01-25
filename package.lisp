@@ -22,6 +22,7 @@
    :getCategories
    :deleteCategory
    :deleteAllCategories
+   :findBlogByTitle
    ;For the tests, and general cleanup if others needed
    :deleteAllBlogEntries
    :deleteAllCategories))

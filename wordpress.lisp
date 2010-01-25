@@ -88,3 +88,11 @@ We are not able to delete the default category, Uncategorized, so if that's all 
 (defun deleteAllBlogEntries (connspec)
   (loop for x in (getblogEntries connspec) do
        (deleteBlogEntry connspec (cdr (assoc :|postid| x)))))
+
+;; Helper methods
+
+(defun findBlogByTitle (connspec title)
+  "Returns the first entry found that matches the title passed to  it"
+  (find-if #'(lambda (x) 
+	      (if (equal (cdr (assoc :|title| x)) title)
+		  t)) (getblogEntries connspec)))

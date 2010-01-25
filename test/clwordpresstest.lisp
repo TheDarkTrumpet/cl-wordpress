@@ -107,6 +107,8 @@
 				'("mt.supportedMethods" "metaWeblog.deletePost" "metaweblog.getRecentPosts" "metaweblog.newPost") :test 'string-equal))))
   (:test (test-blog-post
 	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title"))))
+  (:test (test-find-blog-by-title
+	  (ensure (findBlogByTitle test-server-location "This is a blog title"))))
   (:test (test-get-categories
 	  (ensure (= (getCategories test-server-location) 0))))
   (:test (test-add-category-error
@@ -126,7 +128,10 @@
   (:test (test-blog-post-with-categories
 	  (ensure (progn
 		    (postBlog test-server-location :content "This is a another test blog" :title "blog title" :categories '("Programming" "Random"))
-		    (equal (cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) '("Programming" "Random"))))))
+		    (equal (cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) '("Programming" "Random")))
+		  :report "Expected categories to be: \"Programming\" and \"Random\" but got: ~a, count of getblogentries being: ~a"
+		  :arguments ((cdr (assoc :|categories| (car (last (getblogentries test-server-location))))) 
+			      (length (getblogentries test-server-location))))))
   (:test (test-category-deletion
 	  (ensure (deleteCategory test-server-location (cdr (assoc :|categoryId| (car (last (getcategories test-server-location)))))))))
   (:test (test-blog-count
