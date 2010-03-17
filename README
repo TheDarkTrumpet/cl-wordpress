@@ -1,3 +1,76 @@
-README Information
+cl-wordpress
 
-- 
+======================
+Synopsis
+======================
+
+This library is intended to be a very simple interface to wordpress's API interface.  Using XMLRPC we can use a combination of various namespace calls to execute operations on our wordpress installation.  Options to post, update, delete blogs as well as categories and querying options are what's available now.
+
+Please note that this is not a full implementation of every option that wordpress supports.  The reason for this is that there are a number of commands, and I wanted to work on the most often used ones.  Please feel free to fork this and implement other commands as you would like, and I'll pull the changes in as we go.
+
+======================
+Setup and Dependencies
+======================
+
+This package relies on s-xml-rpc (http://common-lisp.net/project/s-xml-rpc/) for correct operation.
+
+git clone this project, create a symlink to the asd file (either local or global) and you should be able to do a:
+
+(require :cl-wordpress)
+
+If it compiles and loads, you're all good.
+
+You will need to enable the xmlrpc option in the wordpress administration screen.  You can do this by going to "Settings", then "Writing" in the administration screen.  
+
+======================
+Tested Distributions
+======================
+
+Tested with SBCL, untested with others, and the project page for s-xml-rpc has little other information. If you find it does or doesn't work with your distribution of choice, please let me know and I can update this.
+
+======================
+Sample Use
+======================
+
+The most important thing to understand about this library is that you need to create an instance of the wp-information class, providing information that you want.  All methods you'll use rely on this, so some sample option for this would be something like:
+
+(defvar *wp-con* (make-instance 'wp-information :blogid 1 :uid "myadminuser" :pass "myadminpass" :url "/xmlrpc.php" :host "my-host-name"))
+
+Note for the above:
+* Blogid is usually 1, if you have only one blog through your admin.  This can be greater than one if you're hosting from wordpress.com's service.
+* uid/pass are the  user name and passwords you log into the service with
+* url will usually remain the same as above, you shouldn't need to change this
+* host is the *root* of your host, in other words say your host was google, then :host "www.google.com" woulld make sense.
+
+An easy way to start out something would be to get all the categories for your blog, on my test box we'll see some example output:
+
+CL-WORDPRESS> (getcategories *wp-con*)
+(((:|rssUrl| . "http://wordpress.tdtdev/?feed=rss2&amp;cat=181")
+  (:|htmlUrl| . "http://wordpress.tdtdev/?cat=181")
+  (:|categoryName| . "clojure") (:|categoryDescription| . "")
+  (:|description| . "clojure") (:|parentId| . "0") (:|categoryId| . "181"))
+ ((:|rssUrl| . "http://wordpress.tdtdev/?feed=rss2&amp;cat=179")
+  (:|htmlUrl| . "http://wordpress.tdtdev/?cat=179") (:|categoryName| . "lisp")
+  (:|categoryDescription| . "") (:|description| . "lisp") (:|parentId| . "0")
+  (:|categoryId| . "179"))
+ ...)
+
+As you probably guessed, you have a list of cons, the elements of each con is an alist.  We can query a specific entry by doing the following:
+
+ORG-SYNC-WORDPRESS> (cdr (assoc :|categoryName| (first (getcategories *wp-con*))))
+"clojure"
+
+You can also add a category as well by simply running:
+ORG-SYNC-WORDPRESS> (addcategory *wp-con* :name "foo bar")
+182
+
+The same basic structure exists with blog posts, but lets show how something like that would be done.  Getting a list of blog posts is exactly the same as categories, but adding a blog post is a little more confusing to a degree:
+
+ORG-SYNC-WORDPRESS> (postBlog *wp-con* :title "my test title" :content "my test content" :categories '("foo bar" "lisp"))
+"1407"
+
+The ID returned means it was successful.  If you want to schedule a post in the future, that's just a tiny bit more difficult.  postBlog requires that :date is a universaltime object. This can be done through (timestamp-to-universal) and (encode-timestamp).  An example of posting a blog on 12/12/2008, would be done by:
+
+ORG-SYNC-WORDPRESS> (postBlog *wp-con* :title "12/12/2008 post" :content "A test content" :categories '("foo bar" "lisp") :date (timestamp-to-universal (encode-timestamp 0 0 0 0 12 12 2008)))
+
+The rest should be fairly intuitive, but if there are any questions or concerns, please contact me and I'll update the documentation accordingly.
