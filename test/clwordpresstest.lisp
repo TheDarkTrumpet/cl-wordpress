@@ -104,13 +104,18 @@
 	  (ensure (= (getBlogEntries test-server-location) 0))))
   (:test (ensure-available-options 
 	  (ensure (intersection (getAvailableOptions test-server-location)
-				'("mt.supportedMethods" "metaWeblog.deletePost" "metaweblog.getRecentPosts" "metaweblog.newPost") :test 'string-equal))))
+				'("mt.supportedMethods" "metaWeblog.deletePost" "metaweblog.getRecentPosts" "metaweblog.newPost" "metaweblog.editPost") :test 'string-equal))))
   (:test (test-blog-post
 	  (ensure (postBlog test-server-location :content "This is a test blog post" :title "This is a blog title"))))
   (:test (test-blog-post-with-invalid-date
 	  (ensure-error (postBlog test-server-location :content "Test..." :title "This is a blog with invalid date" :date "foo date"))))
   (:test (test-find-blog-by-title
 	  (ensure (findBlogByTitle test-server-location "This is a blog title"))))
+  (:test (test-blog-update
+	  (ensure (progn
+		    (postBlog test-server-location :content "meh" :title "This is a blog title")
+		    (updateBlog test-server-location :content "This is an update test" :title "This is a blog title")
+		    (equal "This is an update test" (cdr (assoc :|description| (findBlogByTitle test-server-location "This is a blog title"))))))))
   (:test (test-get-categories
 	  (ensure (= (getCategories test-server-location) 0))))
   (:test (test-add-category-error
