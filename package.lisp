@@ -17,6 +17,7 @@
    :getAvailableOptions
    :getBlogEntries
    :postBlog
+   :updateBlog
    :deleteblogEntry
    :addCategory
    :getCategories
