@@ -72,7 +72,7 @@ We are not able to delete the default category, Uncategorized, so if that's all 
   "Updates a blog entry to the connection spec passed in. Date must be a universaltime object.  Content and title are required, and title is assumed not to change"
   (if (typep date 'integer)      
       (let* ((retval NIL)
-	     (post (findBlogByTitle title))
+	     (post (findBlogByTitle connspec title))
 	     (postid (cdr (assoc :|postid| post)))
 	     (published (cdr (assoc :|post_status| post)))
 	     (conn-2 (make-instance 'wp-information :blogid postid :uid (uid connspec) :pass (pass connspec) :url (url connspec) :host (host connspec))))

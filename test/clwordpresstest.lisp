@@ -112,10 +112,11 @@
   (:test (test-find-blog-by-title
 	  (ensure (findBlogByTitle test-server-location "This is a blog title"))))
   (:test (test-blog-update
-	  (ensure (progn
-		    (postBlog test-server-location :content "meh" :title "This is a blog title")
-		    (updateBlog test-server-location :content "This is an update test" :title "This is a blog title")
-		    (equal "This is an update test" (cdr (assoc :|description| (findBlogByTitle test-server-location "This is a blog title"))))))))
+	  (ensure 
+	   (progn 
+	     (postBlog test-server-location :content "meh" :title "This is a blog title")
+	     (updateBlog test-server-location :content "This is an update test" :title "This is a blog title")
+	     (equal "This is an update test" (cdr (assoc :|description| (findBlogByTitle test-server-location "This is a blog title"))))))))
   (:test (test-get-categories
 	  (ensure (= (getCategories test-server-location) 0))))
   (:test (test-add-category-error
